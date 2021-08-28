@@ -6,30 +6,46 @@ namespace JeuDuPendu
 {
     class Program
     {
+        
+        private static int _maxFails = 5;
+        private static bool _gameOver = false;
+        private static int _attempts = 0;
+        private static Hangman _hangman;
+        
         private static void Main(string[] args)
         {
-            var attempts = 0;
-            Pendu pendu = new();
-            while (!pendu.End)
+            _hangman = new();
+            while (!_hangman.End)
             {
-                Console.Clear();
-                Console.WriteLine($"Nombre d'essais: {attempts}");
-                Console.WriteLine($"Lettres utilisées: {string.Join(", ", pendu.UsedLetters)}\n");
-                Console.WriteLine($"Le Mot: {pendu.UserWord}");
-                PenduConsoleVisual(pendu.Fails);
+                HangmanConsoleVisual(_hangman.Fails);
+                
                 Console.Write("Quelle lettre recherchez-vous? ");
-                string letter = Console.ReadLine();
-                pendu.CheckLetter(letter);
-                pendu.End = pendu.End || pendu.Fails > 4;
-                attempts++;
+                var letter = Console.ReadLine();
+                var a = string.IsNullOrWhiteSpace(letter);
+                if(string.IsNullOrWhiteSpace(letter) || _hangman.UsedLetters.Contains(letter.ToLower())) continue;
+                
+                _hangman.CheckLetter(letter);
+                _gameOver = _hangman.Fails > _maxFails;
+                _hangman.End = _hangman.End || _gameOver;
+                _attempts++;
             }
-            Console.Write("Partie Terminée, félicitations!");
+            
+            HangmanConsoleVisual(_hangman.Fails);
+            
+            Console.WriteLine(_gameOver
+                ? $"Partie Terminée, vous avez perdu!\nLe mot était: {_hangman.SelectedWord}"
+                : "Partie Terminée, félicitations!");
         }
 
-        private static void PenduConsoleVisual(int totalOfFails)
+        private static void HangmanConsoleVisual(int totalOfFails)
         {
+            Console.Clear();
             new List<string>()
             {
+                $"Nombre d'essais: {_attempts}",
+                $"Nombre de fails: {_hangman.Fails}",
+                $"Lettres utilisées: {string.Join(", ", _hangman.UsedLetters)}\n",
+                $"Le Mot: {_hangman.UserWord}",
                 "  .---------.",
                 "  |/        |",
                 $"  |         {(totalOfFails > 0 ? "O" : "")}",
@@ -42,7 +58,7 @@ namespace JeuDuPendu
         }
     }
 
-    public class Pendu
+    public class Hangman
     {
         public bool End;
         public List<string> Words { get; set; }
@@ -55,7 +71,7 @@ namespace JeuDuPendu
         /// Create new pendu Game and select a new word to start the game.
         /// </summary>
         /// <param name="words">List of strings to use during the Game</param>
-        public Pendu(List<string> words)
+        public Hangman(List<string> words)
         {
             UsedLetters = new List<string>();
             End = false;
