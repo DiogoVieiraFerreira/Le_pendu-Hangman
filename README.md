@@ -4,6 +4,17 @@ Project started for fun, the objective is to refresh c# knowledge and occupy my 
 
 ## V1
 - [x] We have 2 default words : Hello, World
-- [x] We can find or failed to find the word
-- [ ] Custom message when we win or fail to find the word
-- [ ] 
+- [x] We can find or not find the word
+- [x] Custom message when we win or don't find the word
+
+## v2
+- [ ] Possibility to use external file for words
+- [ ] Restart a new game
+- [ ] Add a difficulty system
+    - easy: current system
+    - medium: time global
+    - hard: limit of failures allowed to the size of the word
+    
+## v3
+- [ ] Create commandes for the console
+> Example: to display the help write `./hanggame.exe -h`
