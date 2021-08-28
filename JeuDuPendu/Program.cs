@@ -45,12 +45,11 @@ namespace JeuDuPendu
     public class Pendu
     {
         public bool End;
-        public int Fails { get; private set; }
-        public string UserWord { get; private set; }
         public List<string> Words { get; set; }
-        public List<string> FindedLetters { get; private set; }
-        public List<string> UsedLetters { get; private set; }
         public string SelectedWord { get; private set; }
+        public List<string> UsedLetters { get; private set; }
+        public string UserWord { get; private set; }
+        public int Fails { get; private set; }
         
         /// <summary>
         /// Create new pendu Game and select a new word to start the game.
@@ -59,11 +58,14 @@ namespace JeuDuPendu
         public Pendu(List<string> words)
         {
             UsedLetters = new List<string>();
-            FindedLetters = new List<string>();
             End = false;
             Words = words.Count > 0 ? words : new List<string>() {"Hello", "World"};
             SelectWord();
-            
+            UpdateUserWord();
+        }
+        private void UpdateUserWord()
+        {
+            //each not found letter is replaced by an underscore
             UserWord = string.Join("",
                 string.Join("", SelectedWord.Select(x => UsedLetters.Contains(x.ToString().ToLower()) ? x : '_')));
         }
@@ -84,16 +86,12 @@ namespace JeuDuPendu
             var lowerWord = SelectedWord.ToLower();
             var lowerLetter = letter.ToLower();
             var result = lowerWord.Contains(lowerLetter);
-            
+
             UsedLetters.Add(lowerLetter);
             
-            if (result)
-                FindedLetters.Add(letter);
-            else
-                Fails++;
-            //each not found letter is replaced by an underscore
-            UserWord = string.Join("",
-                string.Join("", SelectedWord.Select(x => UsedLetters.Contains(x.ToString().ToLower()) ? x : '_')));
+            if (!result) Fails++;
+            
+            UpdateUserWord();
             
             if (SelectedWord == UserWord) End = true;
             
