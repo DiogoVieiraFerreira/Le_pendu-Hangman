@@ -85,7 +85,7 @@ namespace JeuDuPendu
             UserWord = string.Join("",
                 string.Join("", SelectedWord.Select(x => UsedLetters.Contains(x.ToString().ToLower()) ? x : '_')));
         }
-        public Pendu() : this(new List<string>()) { }
+        public Hangman() : this(new List<string>()) { }
         /// <summary>
         /// Select a new Word for the game and update "SelectedWord" attribute.
         /// </summary>
