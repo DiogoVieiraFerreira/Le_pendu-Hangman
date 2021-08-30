@@ -9,7 +9,7 @@ Project started for fun, the objective is to refresh c# knowledge and occupy my 
 
 ## v2
 - [ ] Possibility to use external file for words
-- [ ] Restart a new game
+- [x] Restart a new game
 - [ ] Add a difficulty system
     - easy: current system
     - medium: time global
